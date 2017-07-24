@@ -1,7 +1,7 @@
 /*************************************************************************
 	> File Name: ls.c
-	> Author:wyf 
-	> Mail:Catherine199787@outlook.com 
+	> Author:wyf
+	> Mail:Catherine199787@outlook.com
 	> Created Time: 2016年07月22日 星期五 17时15分21秒
  ************************************************************************/
 
@@ -48,12 +48,12 @@ char** fsort(DIR *dir)
     int index[FCOUNT];
     int count = 0;
     char** filenames = (char**)malloc(sizeof(char*)*FCOUNT);
-    
+
     for(i=0; i<FCOUNT; i++){
         filenames[i] = (char*)malloc(sizeof(char)*FNAME_LEN);
         index[i] = i;
     }
-	//获得文件名数组    
+	//获得文件名数组
     while((ptr = readdir(dir)) != NULL){
         strcpy(asd, ptr->d_name);
         if(asd[0] == '.'){
@@ -62,24 +62,24 @@ char** fsort(DIR *dir)
         strcpy(filenames[count], ptr->d_name);
         count++;
     }
-    
+
     int j = count - 1;
-    
+
     closedir(dir);
-    
+
     int t;
-	
+
     for(i = 1;i < count; i++){
-       
-        strcpy(temp,filenames[i]);	
-       
+
+        strcpy(temp,filenames[i]);
+
         for(j = i -1;j >= 0 && (strcmp(temp, filenames[j]) < 0); j--){
-	        strcpy(filenames[ j+1 ], filenames[ j ]);	
+	        strcpy(filenames[ j+1 ], filenames[ j ]);
 		}
-        
-        strcpy(filenames[index[ j+1 ]], temp);	
+
+        strcpy(filenames[index[ j+1 ]], temp);
 	}
-    
+
     for(i = 0; i < count; i++){
         filenames[i][FNAME_LEN] = filenames[index[i]][FNAME_LEN];
     }
@@ -96,34 +96,34 @@ char** afsort(DIR *dir)
     int index[FCOUNT];
     int count = 0;
     char** afilenames = (char**)malloc(sizeof(char*)*FCOUNT);
-    
+
     for(i=0; i<FCOUNT; i++){
         afilenames[i] = (char*)malloc(sizeof(char)*FNAME_LEN);
         index[i] = i;
     }
-	//获得文件名数组    
+	//获得文件名数组
     while((ptr = readdir(dir)) != NULL){
         strcpy(afilenames[count], ptr->d_name);
         count++;
     }
-    
+
     int j = count - 1;
-    
+
     closedir(dir);
-    
+
     int t;
-	
+
     for(i = 1;i < count; i++){
-       
-        strcpy(temp,afilenames[i]);	
-       
+
+        strcpy(temp,afilenames[i]);
+
         for(j = i -1;j >= 0 && (strcmp(temp, afilenames[j]) < 0); j--){
-	        strcpy(afilenames[ j+1 ], afilenames[ j ]);	
+	        strcpy(afilenames[ j+1 ], afilenames[ j ]);
 		}
-        
-        strcpy(afilenames[index[ j+1 ]], temp);	
+
+        strcpy(afilenames[index[ j+1 ]], temp);
 	}
-    
+
     for(i = 0; i < count; i++){
         afilenames[i][FNAME_LEN] = afilenames[index[i]][FNAME_LEN];
     }
@@ -135,7 +135,7 @@ char** afsort(DIR *dir)
 //打开目录
 DIR * openf(char *filename){
     DIR *dir;
-   
+
     dir = opendir(filename);
     if(dir == NULL){
         err("open", __LINE__);
@@ -166,7 +166,7 @@ int fcount(char * path){
     char asd[FNAME_LEN];
     int count = 0;
     struct dirent *ptr;
-    
+
     dir = openf(path);
     while((ptr = readdir(dir)) != NULL){
         strcpy(asd, ptr->d_name);
@@ -181,7 +181,7 @@ int afcount(char * path){
     DIR *dir;
     int count = 0;
     struct dirent *ptr;
-    
+
     dir = openf(path);
     while((ptr = readdir(dir)) != NULL){
         count++;
@@ -215,13 +215,13 @@ void l_print(struct stat buf){
     char buf_time[32];           //why
     struct passwd *psd;
     struct group *grp;
-    
+
     //类型
     if(S_ISLNK(buf.st_mode)){
         printf("l");
     }
     else if(S_ISREG(buf.st_mode)){
-        printf("-"); 
+        printf("-");
     }
     else if(S_ISDIR(buf.st_mode)){
         printf("d");
@@ -243,7 +243,7 @@ void l_print(struct stat buf){
     if(buf.st_mode & S_IRUSR){
         printf("r");
     }else{
-        printf("-");   
+        printf("-");
     }
     if(buf.st_mode & S_IWUSR){
         printf("w");
@@ -260,7 +260,7 @@ void l_print(struct stat buf){
     if(buf.st_mode & S_IRGRP){
         printf("r");
     }else{
-        printf("-");   
+        printf("-");
     }
     if(buf.st_mode & S_IWGRP){
         printf("w");
@@ -277,7 +277,7 @@ void l_print(struct stat buf){
     if(buf.st_mode & S_IROTH){
         printf("r");
     }else{
-        printf("-");   
+        printf("-");
     }
     if(buf.st_mode & S_IWOTH){
         printf("w");
@@ -291,14 +291,14 @@ void l_print(struct stat buf){
     }
 
     printf(" ");
-    
+
     printf("%3d ",buf.st_nlink);
-    
+
     psd = getpwuid(buf.st_uid);
     grp = getgrgid(buf.st_gid);
     printf("%4s",psd->pw_name);
     printf("%4s",grp->gr_name);
-    
+
     if( buf.st_size < 1024){
         printf(" %6d",buf.st_size);
     }
@@ -308,12 +308,12 @@ void l_print(struct stat buf){
     else if (buf.st_size >= pow(2,16) && buf.st_size < pow(2, 32)){
         printf("%6.1fM",(float)buf.st_size/pow(2,16));
     }
-    
+
     strcpy(buf_time, ctime(&buf.st_mtime));
-    buf_time[strlen(buf_time) - 1] = '\0';  
+    buf_time[strlen(buf_time) - 1] = '\0';
     printf("  %-s",buf_time);
 
-} 
+}
 
 
 //获取全部文件属性
@@ -343,10 +343,10 @@ void lr_all(char **filenames, int count){
 }
 //打印总用量
 void sum_size(DIR *dir){
-    int sum; 
+    int sum;
     struct dirent *ptr;
     struct stat buf;
-    
+
     while((ptr = readdir(dir)) != NULL){
         stat(ptr->d_name, &buf);
         sum += buf.st_size;
@@ -359,11 +359,11 @@ void sum_size(DIR *dir){
 
 //逆序输出
 void nxprint(char **filenames, int g_maxlen, int count){
-    
+
     int len;
     int g_leave_len = MAXROWLEN;
     while(count--){
-        
+
         if(g_leave_len < g_maxlen){
             printf("\n");
             g_leave_len = MAXROWLEN;
@@ -379,12 +379,12 @@ void nxprint(char **filenames, int g_maxlen, int count){
 
 //正序输出
 void zxprint(char **filenames, int g_maxlen, int count){
-    
+
     int i, len;
     int g_leave_len = MAXROWLEN;
 
     for(i = 0;i < count; i++){
-        
+
         if(g_leave_len < g_maxlen){
             printf("\n");
             g_leave_len = MAXROWLEN;
@@ -402,17 +402,17 @@ void zxprint(char **filenames, int g_maxlen, int count){
 
 void printfdir(char *path, int depth) {
 
-    DIR * dir; 
-    struct dirent *ptr; 
-    struct stat buf;  
+    DIR * dir;
+    struct dirent *ptr;
+    struct stat buf;
     int g_leave_len = MAXROWLEN;
     int len, g_maxlen = 20;
-	
+
     dir = openf(path);
-    chdir(path); 
+    chdir(path);
     while ((ptr = readdir(dir)) != NULL) {
         lstat(ptr->d_name, &buf);
-        if (S_ISDIR(buf.st_mode)) { 
+        if (S_ISDIR(buf.st_mode)) {
             if (strcmp(".", ptr->d_name) == 0 || strcmp("..", ptr->d_name) == 0) {
                 continue;
             }
@@ -453,10 +453,10 @@ int main(int argc,char *argv[]){
         strcpy(path, "./");
         path[2] = '\0';
     	}
-    i = 1;     
+    i = 1;
 
     int number = j;
-	 
+
     if(j == 1 ){
         number = 0;
         switch(param[number]){
@@ -518,9 +518,9 @@ int main(int argc,char *argv[]){
             }
             break;
             case 'R':{
-				printfdir(path,0);										    
+				printfdir(path,0);
 				break;
-            }   
+            }
         }
         return 0;
     }
@@ -537,7 +537,7 @@ int main(int argc,char *argv[]){
                 sum_size(dir);
                 dir = openf(path);
                 ll_all(afsort(dir), fcount(path));
-            } 
+            }
             break;
             case 115:{
                 int len = maxlen(path) + 2;
@@ -545,14 +545,14 @@ int main(int argc,char *argv[]){
                 nxprint(afsort(dir), len, afcount(path));
             }
             break;
-            case 126: 
+            case 126:
                 dir = openf(path);
 				chdir(path);
                 sum_size(dir);
                 dir = openf(path);
                 lr_all(fsort(dir), fcount(path));
                 break;
-               // case 10 : //lR 
+               // case 10 : //lR
                // case 12 : //Rr
                 case 127:{
                     dir = openf(path);
@@ -577,7 +577,7 @@ int main(int argc,char *argv[]){
         /*
         else if(num == 0){
             strcpy(path,argv[i]);
-            
+
             if(stat(path, &buf) == -1){
                 err("main_stat", __LINE__);
             }
@@ -597,7 +597,7 @@ int main(int argc,char *argv[]){
         }
         else{
             strcpy(path,argv[i]);
-            
+
             if(stat(path, &buf) == -1){
                 err("main_stat", __LINE__);
             }
