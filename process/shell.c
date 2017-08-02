@@ -14,7 +14,7 @@
 #include<stdlib.h>
 #include<dirent.h>
 #include<string.h>
-#include<malloc.h>
+//#include<malloc.h>
 
 #define normal 0
 #define out 1
